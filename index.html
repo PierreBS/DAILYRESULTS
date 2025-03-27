@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Napi Terv és Eredmény Kalkulátor</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; text-align: center; background-color: #f4f4f4; }
+        h2 { background-color: #007BFF; color: white; padding: 15px; border-radius: 5px; }
+        #date { font-size: 20px; margin-bottom: 20px; }
+        table { width: 70%; margin: auto; border-collapse: collapse; background: white; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); }
+        th { background-color: #007BFF; color: white; padding: 15px; font-size: 18px; }
+        td { border: 1px solid black; padding: 15px; font-size: 20px; }
+        input { width: 120px; font-size: 22px; text-align: center; padding: 8px; }
+        h3 { margin-top: 30px; font-size: 22px; }
+        .positive { background-color: #90EE90; }
+        .negative { background-color: #FF7F7F; }
+    </style>
+    <script>
+        function calculateValues() {
+            let plan8k = parseInt(document.getElementById('plan-8k').value) || 0;
+            let plan12k = parseInt(document.getElementById('plan-12k').value) || 0;
+            let act8k = parseInt(document.getElementById('act-8k').value) || 0;
+            let act12k = parseInt(document.getElementById('act-12k').value) || 0;
+            let ticket8k = parseInt(document.getElementById('ticket-8k').innerText) || 0;
+            let ticket12k = parseInt(document.getElementById('ticket-12k').innerText) || 0;
+            
+            let totalPlan = plan8k + plan12k;
+            let totalAct = act8k + act12k;
+            let totalTicket = ticket8k + ticket12k;
+            
+            document.getElementById('ticket-total').innerText = totalTicket;
+            document.getElementById('plan-total').innerText = totalPlan;
+            document.getElementById('act-total').innerText = totalAct;
+            
+            updateCell('act-vs-plan-8k', act8k - plan8k);
+            updateCell('act-vs-plan-12k', act12k - plan12k);
+            updateCell('act-vs-plan-total', totalAct - totalPlan);
+            
+            updateCell('act-vs-ticket-8k', act8k - ticket8k);
+            updateCell('act-vs-ticket-12k', act12k - ticket12k);
+            updateCell('act-vs-ticket-total', totalAct - totalTicket);
+        }
+        
+        function updateCell(id, value) {
+            let cell = document.getElementById(id);
+            cell.innerText = value;
+            if (value < 0) {
+                cell.className = 'negative';
+            } else if (value > 0) {
+                cell.className = 'positive';
+            } else {
+                cell.className = '';
+            }
+        }
+        
+        function setCurrentDate() {
+            let today = new Date();
+            today.setDate(today.getDate() - 1); // Set to one day earlier
+            document.getElementById("date").innerText = "Dátum: " + today.toLocaleDateString("hu-HU");
+        }
+    </script>
+</head>
+<body onload="setCurrentDate()">
+    <h2>Napi Terv és Eredmény Kalkulátor</h2>
+    <p id="date"></p>
+    <table>
+        <tr>
+            <th>Terület</th>
+            <th>TICKET (db)</th>
+            <th>Terv (db)</th>
+            <th>ACT (db)</th>
+            <th>ACT vs Terv (db)</th>
+            <th>ACT vs Ticket (db)</th>
+        </tr>
+        <tr>
+            <td>8k Curing</td>
+            <td id="ticket-8k">3358</td>
+            <td><input type="number" id="plan-8k" oninput="calculateValues()"></td>
+            <td><input type="number" id="act-8k" oninput="calculateValues()"></td>
+            <td id="act-vs-plan-8k">0</td>
+            <td id="act-vs-ticket-8k">0</td>
+        </tr>
+        <tr>
+            <td>12k Curing</td>
+            <td id="ticket-12k">9578</td>
+            <td><input type="number" id="plan-12k" oninput="calculateValues()"></td>
+            <td><input type="number" id="act-12k" oninput="calculateValues()"></td>
+            <td id="act-vs-plan-12k">0</td>
+            <td id="act-vs-ticket-12k">0</td>
+        </tr>
+        <tr>
+            <td><b>TOTAL Curing</b></td>
+            <td id="ticket-total">0</td>
+            <td id="plan-total">0</td>
+            <td id="act-total">0</td>
+            <td id="act-vs-plan-total">0</td>
+            <td id="act-vs-ticket-total">0</td>
+        </tr>
+    </table>
+    
+    <h3>FI Stock</h3>
+    <input type="number" id="fi-stock">
+    
+    <h3>Havi Státusz</h3>
+    <input type="number" id="monthly-status">
+</body>
+</html>
+
